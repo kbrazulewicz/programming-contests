@@ -1,0 +1,41 @@
+CFLAGS_OPSS		= -w -ansi --static
+CXXFLAGS_OPSS	= -w --static
+CFLAGS		= $(CFLAGS_OPSS) -pedantic -Wall -Werror
+CXXFLAGS	= $(CXXFLAGS_OPSS) -pedantic -Wall -Wno-long-long -Werror
+LDLIBS		= -lm
+TOCLEAN		+= $(PROG)
+TEST_FILE	?= $(wildcard test/*.in) $(patsubst %.bz2,%,$(wildcard test/*.in.bz2))
+
+all:    $(PROG)
+
+clean:
+	rm -rf $(TOCLEAN)
+
+mail:
+	mail 'judge@acm.timus.ru' -s 'Solution' -c 'krystian@brazulewicz.pl' < $(SRC)
+
+test: all
+	@for i in $(TEST_FILE); do \
+        testIn=$$i; \
+        testOut=`mktemp`; \
+        testRef=`echo $$i | sed -e 's/\.in/\.out/'`; \
+        if [ -f $$testIn -a -f $$testRef ]; then \
+            ./$(PROG) < $$testIn > $$testOut; \
+            diff -w $$testOut $$testRef; \
+            if [ $$? -ne 0 ]; then \
+                echo test $$i: FAILURE; \
+            else \
+                echo test $$i: OK; \
+            fi \
+        fi; \
+        if [ -f $${testIn}.bz2 -a -f $$testRef ]; then \
+            bzcat $${testIn}.bz2 | ./$(PROG) > $$testOut; \
+            diff -w $$testOut $$testRef; \
+            if [ $$? -ne 0 ]; then \
+                echo test $$i: FAILURE; \
+            else \
+                echo test $$i: OK; \
+            fi \
+        fi; \
+		rm $$testOut; \
+	done
