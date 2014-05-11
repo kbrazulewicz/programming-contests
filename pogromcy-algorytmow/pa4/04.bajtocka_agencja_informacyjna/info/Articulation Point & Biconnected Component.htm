@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0078)http://www.cclub.metu.edu.tr/~fagelgi/studies/olimp/implements/bicon/bicon.htm -->
+<HTML><HEAD><TITLE>Articulation Point & Biconnected Component</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=iso-8859-1">
+<META content="MSHTML 6.00.2800.1226" name=GENERATOR>
+<META content=none name="Microsoft Theme"></HEAD>
+<BODY>
+<CENTER>
+<H2><B>ARTICULATION POINTS &amp; BICONNECTED COMPONENTS</B></H2></CENTER>
+<HR align=center>
+
+<H3>&nbsp;&nbsp;&nbsp; ARTICULATION POINTS</H3>
+<TABLE cols=1 width="100%" border=1>
+  <CAPTION>
+  <H4>DEFINITION</H4></CAPTION>
+  <TBODY>
+  <TR>
+    <TD>
+      <DL>
+        <DD><I>* If a node breaks the graph into more than one component when 
+        removed then it is called as <B>articulation point</B> except root. If 
+        root has more than one child then it is articulation point.</I> 
+    </DD></DL></TD></TR></TBODY></TABLE>
+<P>&nbsp;&nbsp;&nbsp; Assume that there is a spacecraft that is build up 
+modularly (control center, meeting hall etc.). There are critical points that 
+provide the connection between modules. If there is something wrong with them 
+you can't get in contact from a module to all the others. This critical points 
+are the articulation points. 
+<P>&nbsp;&nbsp;&nbsp; Another example; you you have a city map. In the map, if 
+you want to go form somewhere to another city you must pass through an exact 
+city (there is no alternate path). Then this city is an articulation point. 
+<H3>&nbsp;&nbsp;&nbsp; EXAMPLE</H3><IMG height=140 alt="City Map" 
+src="Articulation Point &amp; Biconnected Component_pliki/art_map.gif" width=222 
+vspace=10 border=1 NOSAVE> <BR><I><U>Figure. Articulation Points</U></I> 
+<P>&nbsp;&nbsp;&nbsp; As shown in the figure nodes 2 6 7 9 are articulation 
+points. <BR>
+<HR align=center>
+
+<H4><B><I>&nbsp;&nbsp;&nbsp; </I></B>ALGORITHM for finding Articulation 
+Points</H4>
+<TABLE cols=1 width="100%" border=1>
+  <CAPTION>
+  <H4>DEFINITION</H4></CAPTION>
+  <TBODY>
+  <TR>
+    <TD>
+      <DL>
+        <DD><I><B>Highest Ancestor:</B> The least numbered node that a node or 
+        its descendants connected.</I> </DD></DL></TD></TR></TBODY></TABLE>
+<P>&nbsp;&nbsp;&nbsp; The algorithm for finding articulation point is linear. 
+The method is Depth First Search. 
+<OL>
+  <LI>visit the nodes by depth first 
+  <LI>when terminating return the highest ancestor 
+  <LI>look at the highest ancestor of the descendants of the node 
+  <LI>if&nbsp; the highest ancestor of the descendants of a node is itself, then 
+  the node is articulation point except root. </LI></OL><B><I>NOTE:</I></B> Count 
+the branches of the root node. If it is greater than 1 than it is articulation 
+point also. 
+<P><IMG height=299 alt="Algorithm Tree" 
+src="Articulation Point &amp; Biconnected Component_pliki/art_tree.gif" 
+width=192 border=1 NOSAVE> <BR><I><U>Figure. Depth First Tree</U></I> 
+<P>&nbsp;&nbsp;&nbsp; As it is seen from the figure clearly, nodes 7 2 6 9 are 
+articulation points. 
+<UL>
+  <LI>7 is an articulation point since the highest ancestor of 5 2 9 8 is 
+  7.node. 
+  <LI>2 is an articulation point since the highest ancestor of 6 is 2.node. 
+  <LI>6 is an articulation point since the highest ancestor of 4 is 6.node. 
+  <LI>9 is an articulation point since the highest ancestor of 3 is 9.node. 
+  <LI>1 is NOT an articulation point since it has only one branch. </LI></UL>
+<HR align=center>
+
+<TABLE cols=1 width="100%" border=1>
+  <CAPTION><B>Program Code (Turbo Pascal 7.0 &amp; Turbo C 3.0):</B></CAPTION>
+  <TBODY>
+  <TR>
+    <TD><I><TT><FONT color=#000099>{ returns highest ancestor 
+      }</FONT></TT></I> <BR><TT><B>function </B>visit(k: <B>integer</B>): 
+      <B>integer</B>;&nbsp;</TT> <BR><B><TT>begin</TT></B> <BR><TT>&nbsp; 
+      id:=id+1;</TT> <BR><TT>&nbsp; val[k]:=id; min:=id;</TT> 
+      <P><TT>&nbsp; <B>for </B>i:=1 to V do</TT> <BR><TT>&nbsp;&nbsp;&nbsp; 
+      <B>if </B>a[k,i]&lt;&gt;0 <B>then</B></TT> <BR><TT>&nbsp;&nbsp;&nbsp; 
+      <B>begin</B></TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if 
+      </B>val[i]=0 <B>then</B></TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      <B>begin</B></TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      m:=visit(I);</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if 
+      </B>m&lt;min <B>then</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      min:=m;</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>else if 
+      </B>m=val[k] <B>then</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      write(k);</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>end</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>else</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if </B>val[I]&lt;=min 
+      <B>then&nbsp;</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      min:=val[I];</TT> <BR><TT>&nbsp;&nbsp;&nbsp; <B>end</B>;</TT> 
+      <BR><TT>&nbsp; visit:=min;</TT> <BR><TT><B>end</B>;</TT></P></TD></TR>
+  <TR>
+    <TD><I><TT><FONT color=#000099>// returns highest ancestor</FONT></TT></I> 
+      <BR><TT>visit(<B>int</B> k)</TT> <BR><TT>{</TT> <BR><TT>&nbsp; <B>int</B> 
+      i,j,min,m=0;</TT> 
+      <P><TT>&nbsp; ++id,val[k]=id,min=id;</TT> <BR><TT>&nbsp; <B>for</B> (i=1; 
+      i&lt;=n; ++i)</TT> <BR><TT>&nbsp;&nbsp;&nbsp; <B>if</B> (mat[k][i])</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if</B> (!val[i])</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if</B> (k==ROOT) 
+      ++branch;</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      m=visit(i);</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if</B> 
+      (m&lt;min) min=m;</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      <B>else</B></TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      <B>if</B> (m==val[k]) <B>printf</B>("%d ",k);</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>else</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min=(min&gt;=val[i]) ? 
+      val[i] : min;</TT> <BR><TT>&nbsp; <B>return</B> min;</TT> 
+      <BR><TT>}</TT></P></TD></TR></TBODY></TABLE>
+<HR align=center>
+
+<H3>&nbsp;&nbsp;&nbsp; BICONNECTED COMPONENTS</H3>
+<TABLE cols=1 width="100%" border=1>
+  <CAPTION>
+  <H4>DEFINITION</H4></CAPTION>
+  <TBODY>
+  <TR>
+    <TD><I>*&nbsp; In a graph in a selected component, if you can go from one 
+      of the nodes to all other nodes by an alternative path then the component 
+      is called <B>biconnected component</B>.</I></TD></TR></TBODY></TABLE>
+<P>&nbsp;&nbsp;&nbsp; Articulation points seperate the graph into biconnected 
+components. <BR><IMG height=179 alt="Biconnected Components" 
+src="Articulation Point &amp; Biconnected Component_pliki/bcc_map.gif" width=260 
+vspace=10 border=1 NOSAVE> <BR><I><U>Figure. Biconnected Component Map</U></I> 
+<P>&nbsp;&nbsp;&nbsp; As shown in the figure the biconnected components are; 
+<BR>[ 1 7 8 ] <BR>[ 2 5 7 9 ] <BR>[ 3 ]&nbsp;&nbsp;&nbsp; <I>(* Recall that also 
+single nodes can be a biconnected component by themselves.)</I> <BR>[ 4 ] <BR>[ 
+6 ] 
+<P>&nbsp;&nbsp;&nbsp; Let's examine why [ 2 5 7 9 ] is a biconnected component. 
+Recalling the definition I can travel 
+<UL>
+  <LI>from 2 to 5 by the path 2 -&gt; 5 or 2 -&gt; 7 -&gt; 5; the two paths are 
+  completely different from each other. 
+  <LI>from 2 to 7 by the path 2 -&gt; 7 or 2 -&gt; 9 -&gt; 7 
+  <LI>from 2 to 9 by the path 2 -&gt; 9 or 2 -&gt; 5 -&gt; 7 -&gt; 9 </LI></UL>and 
+the condition is same for the other nodes (5,7,9). So we can easily say that [ 2 
+5 7 9 ] is a biconnected component. 
+<P>&nbsp;&nbsp;&nbsp; Now, let's examine the special case, the single node 
+biconnected component, condition. For example, [3];&nbsp; in the component 
+selected there are no other nodes so there is no contradiction with the 
+definition, consequently we can say that [3] is a biconnected component itself. 
+<BR>
+<HR align=center>
+
+<H4>ALGORITHM for finding Biconnected Components</H4><IMG height=179 
+alt=conditions 
+src="Articulation Point &amp; Biconnected Component_pliki/bcc_spc.gif" width=260 
+vspace=10 border=1 NOSAVE> <BR><I><U>Figure. Conditions for articulation 
+point</U></I> 
+<P>&nbsp;&nbsp;&nbsp; We will use a stack to hold the current biconnected 
+component in articulation algorithm. 
+<OL>
+  <LI>When terminating the visit procedure in depth first search, push the node 
+  to the stack. 
+  <LI>If the node is determined as articulation point then write the component: 
+  there are three conditions for an articulation point as shown in the figure; 
+  <UL>
+    <LI>(a) the articulation point is owned by two or more components, then 
+    write the articulation and pop the component from the stack and push it into 
+    the stack. 
+    <LI>(b) it is not included by the component, then write the component and 
+    push it. 
+    <LI>(c) it is included by the current component but not included by the 
+    backward component, then&nbsp; pop the component. </LI></UL>
+  <LI>At last empty the stack. </LI></OL><B><I>Algorithm Steps for the 
+example:</I></B> <BR>&nbsp; 
+<TABLE cols=3 width=370 border=1>
+  <TBODY>
+  <TR>
+    <TD><B>Stack</B></TD>
+    <TD width=80><B>Articulation Point</B></TD>
+    <TD width=80><B>Write</B></TD></TR>
+  <TR>
+    <TD>5 (10 4)</TD>
+    <TD>6</TD>
+    <TD>ap &amp; pop</TD></TR>
+  <TR>
+    <TD>5 6</TD>
+    <TD>2</TD>
+    <TD>&nbsp;</TD></TR>
+  <TR>
+    <TD>5 (3)</TD>
+    <TD>9</TD>
+    <TD>pop</TD></TR>
+  <TR>
+    <TD>(5 9 2)</TD>
+    <TD>7</TD>
+    <TD>ap &amp; pop</TD></TR>
+  <TR>
+    <TD>(7 8 1)</TD>
+    <TD>(empty stack)</TD>
+    <TD>pop</TD></TR></TBODY></TABLE>
+<HR align=center>
+
+<TABLE cols=1 width="100%" border=1>
+  <CAPTION><B>Program Code (Turbo C 3.0):</B></CAPTION>
+  <TBODY>
+  <TR>
+    <TD><I><TT><FONT color=#000099>// check if biconnected 
+      component</FONT></TT></I> <BR><TT><B>#define</B> ROOT 1</TT> 
+      <BR><TT><B>int</B> val[MAX],id,</TT> <BR><TT>&nbsp;&nbsp;&nbsp; 
+      stack[MAX],s_top,</TT> <BR><TT>&nbsp;&nbsp;&nbsp; ha[MAX],&nbsp; <I><FONT 
+      color=#000099>// highest ancestor</FONT></I></TT> <BR><TT><FONT 
+      color=#000000><I>&nbsp;&nbsp;&nbsp; </I>ap[MAX], </FONT><I><FONT 
+      color=#000099>// articulation points</FONT></I></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp; branch,</TT> <BR><TT>&nbsp;&nbsp;&nbsp; 
+      if_written,</TT> <BR><TT>&nbsp;&nbsp;&nbsp; comp[MAX];</TT> 
+      <P><I><TT><FONT color=#000099>// check conditions for biconnected 
+      comp.</FONT></TT></I> <BR><TT><B>void</B> check(<B>int</B> x)</TT> 
+      <BR><TT>{</TT> <BR><TT>&nbsp; <B>int</B> i,count=0;</TT> 
+      <P><TT>&nbsp; <B>if</B> (x!=ROOT) ap[x]=TRUE;</TT> <BR><TT>&nbsp; 
+      <B>for</B> (i=s_top-1; i&gt;0 &amp;&amp; ha[stack[i]]&gt;=val[x]; 
+      --i);</TT> 
+      <P><TT>&nbsp; <B>if</B> (ap[stack[s_top-1]] &amp;&amp; 
+      comp[stack[s_top-1]]</TT> <BR><TT>&nbsp; &amp;&amp; (s_top==1 || 
+      s_top-i==2)) --s_top;</TT> <BR><TT>&nbsp; <B>else</B></TT> <BR><TT>&nbsp; 
+      {</TT> <BR><TT>&nbsp;&nbsp;&nbsp; <B>for</B> ( 
+      ;ha[stack[s_top-1]]&gt;=val[x] &amp;&amp; s_top&gt;0; ++count)</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      bicon[c_num][stack[--s_top]]=TRUE;</TT> 
+      <P><TT>&nbsp;&nbsp;&nbsp; <B>if</B> (count&gt;1)</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp; {</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      bicon[c_num][x]=TRUE;</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      comp[x]=TRUE,if_written=x ? if_written : TRUE;</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp; }</TT> <BR><TT>&nbsp;&nbsp;&nbsp; ++c_num;</TT> 
+      <BR><TT>&nbsp; }</TT> <BR><TT>}</TT> 
+      <P><I><TT><FONT color=#000099>// find articulation points</FONT></TT></I> 
+      <BR><TT>visit(<B>int</B> k)</TT> <BR><TT>{</TT> <BR><TT>&nbsp; <B>int</B> 
+      i,j,min,m=0;</TT> 
+      <P><TT>&nbsp; ++id,val[k]=id,min=id;</TT> <BR><TT>&nbsp; <B>for</B> (i=1; 
+      i&lt;=n; ++i)</TT> <BR><TT>&nbsp;&nbsp;&nbsp; <B>if</B> (mat[k][i])</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if</B> (!val[i])</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if</B> (k==ROOT) 
+      ++branch;</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      m=visit(i);</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>if</B> 
+      (m&lt;min) min=m;</TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      <B>else</B></TT> <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+      <B>if</B> (m==val[k] &amp;&amp; s_top&gt;0) check(k);</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }</TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <B>else</B></TT> 
+      <BR><TT>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; min=(min&gt;=val[i]) ? 
+      val[i] : min;</TT> 
+      <P><TT>&nbsp; stack[s_top++]=k,ha[k]=min;</TT> <BR><TT>&nbsp; 
+      <B>return</B> min;</TT> <BR><TT>}</TT> 
+      <P><I><TT><FONT color=#000099>// find biconnected 
+      components</FONT></TT></I> <BR><TT><B>void</B> bcc(<B>void</B>)</TT> 
+      <BR><TT>{</TT> <BR><TT>&nbsp; <B>int</B> i;</TT> 
+      <P><TT>&nbsp; visit(ROOT);</TT> <BR><TT>&nbsp; <B>if</B> (branch&gt;1) 
+      ap[ROOT]=TRUE;</TT> <BR><TT>&nbsp; <B>if</B> (!ap[ROOT] &amp;&amp; 
+      !if_written) bicon[c_num][stack[0]]=TRUE;</TT> <BR><TT>}</TT> 
+      <BR><TT>&nbsp;</TT></P></TD></TR></TBODY></TABLE>
+<HR align=center>
+
+<H3>COMPLEXITY</H3>&nbsp;&nbsp;&nbsp; The algorithms above are a bit complex 
+,but linear algorithms, so they are rather fast for examining a graph. 
+<BR>&nbsp;&nbsp;&nbsp; Complexity = O(<I>n</I>). <BR>
+<HR align=center>
+
+<H3>REFERENCES</H3><I>Algorithms, Robert Sedgewick, Addison Wesley Pub.</I> 
+<BR><I>&nbsp;&nbsp;&nbsp; Chapter 30 - Connectivity, Biconnectivity 
+(s.324-330)</I> <BR>
+<HR width="100%">
+</BODY></HTML>

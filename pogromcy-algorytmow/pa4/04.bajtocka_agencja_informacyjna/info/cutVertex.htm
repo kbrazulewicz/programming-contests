@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0064)http://www-math.cudenver.edu/~wcherowi/courses/m4408/gtaln6.html -->
+<HTML><HEAD><TITLE>Graph Theory Lecture Notes 6a</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1250">
+<META content="MSHTML 6.00.2800.1226" name=GENERATOR></HEAD>
+<BODY bgColor=#ffffff>
+<H2 align=center>Graph Theory Lecture Notes 6</H2>
+<H3>Tree Growing</H3>Let G be a graph and T a tree which is a subgraph of G. A 
+<STRONG><EM>frontier edge</EM></STRONG> of G is an edge which has exactly one 
+endpoint in T.
+<P>A <STRONG><EM>standard vertex labeling</EM></STRONG> of a graph is an 
+assignment of consecutive integers, starting at either 0 or 1, to the vertices 
+of the graph. 
+<P><STRONG>Tree Growing Algorithm</STRONG>
+<P><STRONG>Corollary 4.1.3:</STRONG> A graph is connected if and only if the 
+basic tree-growing algorithm labels all its vertices.
+<P>Forest growing
+<P>Tree growing in a digraph
+<P>
+<H3>Depth-First and Breadth-First Search</H3>These are tree growing algorithms 
+which specify how the frontier edge is to be chosen in different ways.
+<P><EM>Depth-First Search:</EM> Choose the frontier edge which has the largest 
+label.
+<P><STRONG>Proposition 4.2.1:</STRONG> Let T be the spanning tree produced by a 
+depth-first search on an undirected connected graph. Let e be a non-tree edge of 
+the graph with endpoints x and y. If the label of x &lt; label of y, then x is 
+an ancestor of y in T.
+<P><EM>Breadth-First Search:</EM> Choose the frontier edge which has the 
+smallest label.
+<P><STRONG>Proposition 4.2.2:</STRONG> When breadth-first search is applied to 
+an undirected connected graph, the endpoints of each non-tree edge are either at 
+the same level or at consecutive levels in the tree produced.
+<P>
+<H3>Applications of Depth-First Search</H3><STRONG>Component Finding</STRONG>
+<P><STRONG>Finding Cut-vertices of a connected graph</STRONG>
+<P><STRONG>Proposition 4.3.1:</STRONG> A vertex v in a connected graph is a 
+cut-vertex if and only if there exist two distinct vertices u and w, both 
+different from v, such that v is on every u-w path in the graph.
+<P><STRONG>Proposition 4.3.2:</STRONG> Let tree T be the result of applying 
+depth-first search to a connected graph G. Then the root r of T is a cut-vertex 
+of G if and only if r has more than one child in T.
+<P><STRONG>Proposition 4.3.3:</STRONG> Let tree T be the result of applying 
+depth-first search to a connected graph G. Then a non-root v of T is a 
+cut-vertex of G if and only if v has a child w such that no descendant of w is 
+joined to an ancestor of v by a non-tree edge.
+<P>Let low(w) be the smallest label assigned to the vertices w and all vertices 
+joined by a non-tree edge to a descendant of w.
+<P><STRONG>Corollary 4.3.4:</STRONG> Let tree T be the result of applying 
+depth-first search to a connected graph G. Then a non-root v of T is a 
+cut-vertex of G if and only if v has a child w such that low(w)<IMG 
+src="cutVertex_pliki/ge.gif" align=middle> label of v.
+<P>Using these ideas we can find cut-vertices with the following algorithm:
+<P><STRONG>Algorithm 4.3.2: Finding Cut-Vertices</STRONG>
+<P>Initialize set K as empty. <BR>Choose an arbitrary vertex r from the 
+graph.<BR>Do a depth-first search starting at r, resulting in tree T.<BR>If root 
+r has more than one child in T, add r to K.<BR>For each vertex w, compute 
+low(w).<BR>For each non-root v, if there is a child u of v with low(u) <IMG 
+src="cutVertex_pliki/ge.gif" align=middle> label of v, add v to K.<BR>Output K, 
+the set of cut-vertices of the graph. </P></BODY></HTML>

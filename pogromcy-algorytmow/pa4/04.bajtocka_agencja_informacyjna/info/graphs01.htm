@@ -1,0 +1,273 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0067)http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/graphs.html -->
+<HTML><HEAD><TITLE>graphs</TITLE>
+<META http-equiv=Content-Type content="text/html; charset=windows-1250">
+<META content="MSHTML 6.00.2800.1226" name=GENERATOR></HEAD>
+<BODY text=#000000 vLink=#660000 aLink=#ffffff link=#0000ff bgColor=#ffffff>
+<CENTER>
+<H1>Basic Traversal and Search Techniques</H1></CENTER>First review (Chapter 2 
+stuff). Chapter 6 stuff is <A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/graphs.html#ch6">here</A>
+<P>A graph consists of two sets, V and E
+<P>G = (V,E)
+<P>V is a finite, nonempty set of <B>vertices</B>
+<P>E is a set of pairs of vertices called <B>edge</B>s
+<P><B><I>Directed</I> </B>Graphs (digraphs) -- the edges are <U>ordered</U> 
+pairs of Vertices (arrows indicate direction) &lt;u,v&gt;: u is the tail and v 
+is the head of the edge u --&gt; v.
+<P><A name=1>
+<P>In an <B><I>undirected</I></B> graph, the pair of vertices representing any 
+edge is unordered (i.e., (u,v) and (v,u) represent the same edge.)
+<P>Figure 2.25: (page 114)
+<P>G1 and G2 are undirected
+<P>G3 is directed.
+<P>See the set representations (same page)
+<P>Terms:
+<P>Several kinds of <U>undirected graphs</U> are shown 
+<P><A name=2>
+<P>
+<TABLE cellSpacing=2 cellPadding=2 bgColor=#ffffff border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD><IMG src="graphs01_pliki/graphintro1.gif"></TD>
+    <TD><IMG src="graphs01_pliki/graphintro2.gif"></TD>
+    <TD><IMG src="graphs01_pliki/graphintro3.gif"></TD>
+    <TD><IMG src="graphs01_pliki/graphintro4.gif"></TD>
+    <TD><IMG src="graphs01_pliki/graphintro5.gif"></TD></TR></TBODY></TABLE>
+<P>Two vertices u and v in an undirected graph are called <B><I>adjacent 
+</I></B><I></I>if there is an edge from the first to the second. The edge (u,v) 
+is <B><I>incident</I></B> on vertices u and v. 
+<P>In the undirected graph of panel (a), vertices 1 and 2 are adjacent, as are 3 
+and 4, but 1 and 4 are not adjacent. 
+<P>A <B><I>path</I></B><I> </I>is a sequence of distinct vertices, each adjacent 
+to the next. Panel (b) shows a path. 
+<P>A <B><I>cycle</I></B><I> </I>is a path containing at least three vertices 
+such that the last vertex on the path is adjacent to the first. Panel (c) shows 
+a cycle. 
+<P><A name=3>
+<P>An undirected graph is <B><I>connected</I></B><I> </I>if there is a path from 
+any vertex to any other vertex; panels (a),(b), and (c) show connected graphs, 
+and panel (d) shows a disconnected graph.
+<P>Panel (e) shows a connected graph with no cycles. You will notice that this 
+graph is, in fact, a tree, and we take this property as the definition: A 
+<B><I>Free Tree </I></B><I></I>is defined as a connected undirected graph with 
+no cycles (acyclic).
+<P>Directed Graphs:
+<P>
+<TABLE cellSpacing=2 cellPadding=2 bgColor=#ffffff border=0>
+  <TBODY>
+  <TR vAlign=top>
+    <TD><IMG src="graphs01_pliki/graphintro6.gif"></TD>
+    <TD><IMG src="graphs01_pliki/graphintro7.gif"></TD>
+    <TD><IMG src="graphs01_pliki/graphintro8.gif"></TD></TR></TBODY></TABLE>
+<P>
+<P><A name=4>
+<P>For directed graphs we can make similar definitions. 
+<P>We require all edges in a path or a cycle to have the same direction, so that 
+following a path or a cycle means always moving in the direction indicated by 
+the arrows. 
+<P>Such a path (cycle) is called a <I>directed </I>path (cycle). A directed 
+graph is called <B><I>strongly connected</I></B><I> </I>if there is a directed 
+path from any vertex to any other vertex. 
+<P>
+<P>The directed graphs in panels (b) and (c) show pairs of vertices with 
+directed edges going both ways between them. 
+<P>Since directed edges are ordered pairs and the ordered pairs (<I>v,w</I>) and 
+(<I>w,v</I>) are distinct if <I>v </I>!=<I> w, </I>such pairs of edges are 
+permissible in directed graphs. Since the corresponding unordered pairs are not 
+distinct, however, in an undirected graph there can be at most one edged 
+connecting a pair of vertices. Similarly, since the vertices on an edge are 
+required to be distinct, there can be no edge from a vertex to itself. (Although 
+we shall not do so) sometimes these requirements are relaxed to allow multiple 
+edges connecting a pair of vertices and self-loops connecting a vertex to 
+itself. (page 115)
+<P><A name=5>More definitions:
+<P><B>Subgraphs</B>: page 115 and figures on 116
+<P>A <B>connected component</B>, H, of an undirected graph is a maximal 
+connected subgraph. By <B>maximal</B>, we mean that G contains no other subgraph 
+that is both connected and properly contains H. (figure 2.28)
+<P>Note: G4 is disconnected but it has two connected components H1 and H2.
+<P>A <B>strongly connected component</B> is a maximal subgraph that is strongly 
+connected. (figure 2.29) Note here that G3 is not strongly connected, but it has 
+two strongly connected components.
+<P><A name=6><B>APPLICATIONS FOR GRAPHS</B> 
+<P>
+<TABLE cellSpacing=4 cellPadding=2 border=1>
+  <TBODY>
+  <TR>
+    <TD vAlign=center align=middle><B>Application</B></TD>
+    <TD vAlign=center align=middle><B>Verticies</B></TD>
+    <TD vAlign=center align=middle><B>Edges</B></TD></TR>
+  <TR>
+    <TD vAlign=center align=middle>Circuit Networks</TD>
+    <TD vAlign=center align=middle>Points of Connection</TD>
+    <TD vAlign=center align=middle>Component Wires</TD></TR>
+  <TR>
+    <TD vAlign=center align=middle>Transport Networks</TD>
+    <TD vAlign=center align=middle>Stations</TD>
+    <TD vAlign=center align=middle>Routes</TD></TR>
+  <TR>
+    <TD vAlign=center align=middle>Maps</TD>
+    <TD vAlign=center align=middle>States/Regions</TD>
+    <TD vAlign=center align=middle>Adjacency Relations (e.g. Graph 
+  Coloring)</TD></TR>
+  <TR>
+    <TD vAlign=center align=middle>Program Flow Analysis</TD>
+    <TD vAlign=center align=middle>Procedures/Modules</TD>
+    <TD vAlign=center align=middle>Calls</TD></TR></TBODY></TABLE>
+<P>Finding shortest paths, project planning, identification of chemical 
+compounds, statistical mechanics, genetics, linguistics, etc.
+<P><A name=7><B>Graph Implementations (section 2.6.3)</B>
+<P>Keep in mind graphs on page 114 for examples
+<P>
+<P>FirstImplementation: <U>Adjacency Matrix</U>
+<P>Connected vertices on a graph are ordered pairs in a matrix. (for weighted 
+these are values) Figure 2.30
+<P>Positive: easy to visualize
+<P>Negative: often sparse, waste time and space
+<P>How many edges? Is it connected? O(n<SUP>2</SUP>)
+<P><A name=8>Second Implementation: <U>Adjacency Lists</U>
+<P>For the n rows in the adjacency matrix, make them linked lists. There is one 
+for each vertex in G.
+<P>Each node in the linked list has two fields: data and link. The data is the 
+indices of the vertex adjacent to vertex i (in HeadNode). Figure 2.31
+<P>(If want a weighted edge, have a third field)
+<P>Positive: easy to visualize
+<P>Negative: How many edges? O(n+e)
+<P>There are combinations of links and arrays ... and links and links, etc
+<P><A name=ch6>
+<H3>Techniques for Graphs</H3>
+<P><B>Breadth-first search (BFS):</B>
+<P>Roughly analogous to level-by-level traversal of an ordered tree. Consider 
+visually (and for trees).
+<P>See algorithm and description on page 320. Also see analysis. O(n+e) 
+<TABLE cellSpacing=2 cellPadding=2 border=1>
+  <TBODY>
+  <TR>
+    <TD><IMG src="graphs01_pliki/minspan5.gif"></TD></TR>
+  <TR>
+    <TD>Scan for nodes with increasing radius</TD></TR></TBODY></TABLE><A name=9>
+<P><B>Depth-first search (DFS):</B>
+<P>Roughly analogous to preorder traversal of an ordered tree(Note section 6.1). 
+Consider visually (and for trees). 
+<P>
+<P>See algorithm and description on page 324. Also see analysis. O(n+e) 
+<P>
+<TABLE cellSpacing=2 cellPadding=2 border=1>
+  <TBODY>
+  <TR>
+    <TD><IMG src="graphs01_pliki/minspan4.gif"></TD></TR>
+  <TR>
+    <TD>include edges into simple path as long as possible.<BR>Back up and try 
+      again</TD></TR></TBODY></TABLE>
+<P><A name=10>
+<P>Example <A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/bfsdfs.gif">from 
+text</A>
+<P><B>Connected components:</B>
+<P>If G is an undirected graph, then one can determine whether or not a graph is 
+connected by simply making a call to either DFS or BFS and then determining if 
+there is any unvisited vertex.
+<P>The set of connected components of a graph can be obtained by making repeated 
+calls to either DFS or BFS on vertices which are not in a connected component 
+yet. 
+<P><B>Spanning trees</B>
+<P>When the graph G is connected, a depth-first or breath-first search starting 
+at any vertex visits all the vertices in G. In this case the edges of G are 
+partitioned into two sets T (for tree edges) and N (for nontree edges), where T 
+is the set of edges used or traversed during the search and N the set of 
+remaining edges. 
+<P><A name=11>The edges in N can be classified as <B>cross edges</B> or <B>back 
+edges</B>
+<P>
+<UL>All edges will be either 
+  <OL>
+    <LI>forward edge: edge in T 
+    <LI>back edge: one end point is an ancestor of other in the tree
+    <LI>cross edge: neither of above (for edge (u,v) not in T, u is not an 
+    ancestor of v and v is not an ancestor of u)</LI></OL></UL>
+<P>Any tree consisting solely of edges in G and including all vertices in G is 
+called a <B>spanning tree</B>.
+<P>See <A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/bfsdfs.gif">figures 
+6.5 </A>(DFS and BFS spanning)
+<P>Note: If a nontree edge is introduced into any spanning tree, then a cycle is 
+formed. Hence we do not add them and call them back edges or cross edges.
+<P><A name=12>Some significant properties:
+<P>Claim: depth-first spanning trees have no cross edges 
+<P>A spanning tree is a <I>minimal subgraph</I>, G', of G such that V(G') = V(G) 
+and G' is connected. (A mimimal subgraph is one with the fewest number of 
+edges.)
+<P>Finding minimal subgraphs is a very common type of problem. (e.g., 
+communication networks, traveling salesperson problem)
+<P><A name=13>
+<H3>Communications Breakdown Analysis</H3>Find maximal biconnected components 
+and articulation points
+<P><B>Biconnected components</B>
+<P>A vertex v of G is an <B>articulation point</B> iff the deletion of v, 
+together with the deletion of all edges incident to v, leaves behind a graph 
+that has at least two connected components.
+<P>A <B>biconnected graph </B>is a connected graph that has no articulation 
+points.
+<P><A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/6.gif">Figure 6.6 
+</A>is <U>not</U> biconnected,<A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/7.gif"> 6.7 
+</A><U>is</U> biconnected
+<P>Articulation points are undesirable in graphs that represent communication 
+networks. Why?
+<P><A name=14>A <U>biconnected component</U> of a connected graph G is a maximal 
+biconnected subgraph H of G. By maximal, we mean that no other subgraph that is 
+both biconnected and properly contains H. (<A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/8.gif"> 
+Biconnected components </A>of graph shown in Figure 6.6) 
+<P>The biconnected components of a connected, undirected graph G can be found by 
+using any depth-first spanning tree of G.
+<P>
+<P><B>See pages 329-333. </B>
+<P><B></B>U is an <B>articulation point</B> iff 
+<P>(1) u is either the root of the <U>depth-first spanning tree</U> that has two 
+or more children 
+<P>(2) u has at least one child, w, such that it is <B>not</B> possible to reach 
+an ancestor of u using a path composed soley of w, descendents of w, and a 
+single back edge.
+<P><A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/9.gif">consider 
+</A>and do the depth-first tree 
+<P><A name=15>Assume nodes are labeled according to depth first numbering 
+<P>Let Low(w) = smallest node which can be reached using a path containing 
+descedents of w and at most one back edge. graph <A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/9low.gif">9 with 
+low </A>
+<P>Now, someone smart looked at this and made a nice <U>recurrence relation</U> 
+for you:
+<P>
+<P>Low(w) = min{dfn(w), min{Low(x)|x is a child of w}, min{dfn(x)|(w,x) is a 
+back edge} }
+<P>
+<P>so
+<P>U is an articulation point iff 
+<P>(1) u is either the root of the spanning tree that has two or more children 
+<P>(2) or u is not the root and u has a child w such that Low(w) <U>&gt;</U> 
+dfn(u).
+<P><A name=16>See <A 
+href="http://www.ecst.csuchico.edu/~amk/foo/csci356/notes/ch6/9.gif">Figure 
+6.9</A>: (a) has dfn, (b) has DF Spanning tree, Low[1:10] = 
+{1,1,1,1,6,8,6,6,5,4} 
+<P>Node vertex 3 is an articulation point as it has a child 10 such that low(10) 
+= 4 <U>&gt;</U> 3 = dfn(3).
+<P>
+<P>Node vertex 2 is an articulation point as it has a child 5 such that low(5) = 
+6 <U>&gt;</U> 6 = dfn(2) 
+<P>
+<P>Node vertex 5 is an articulation point as it has a child 6 such that low(6) = 
+8 <U>&gt;</U> 7 = dfn(5)
+<P>
+<P>Consider vertices 1,4,5 Node vertex 4 is not an articulation point since it 
+<B>is</B> possible to reach an ancestor via a child of 4: descendent 3, 
+descendent 2, and a back edge. 
+<P>Function DFS is easily modified to compute dfn and low for each vertex of a 
+connected graph. (Algorithm 6.9)
+<P>
+<P>Once articulation points are determined, biconnected components can be found 
+<P></P></BODY></HTML>
