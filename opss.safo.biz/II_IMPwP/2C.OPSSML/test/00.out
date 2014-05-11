@@ -1,0 +1,16 @@
+<?xml version="11.1" OPSSML ?>
+<root a="fg" b="23">
+<x attr="0" attr1a="value" attr1b="value">
+<tag/>
+</x>
+<x/>
+<ya>
+</ya>
+<yaa>
+<abc>
+</abc>
+<def/>
+<ghi x="15">
+</ghi>
+</yaa>
+</root>

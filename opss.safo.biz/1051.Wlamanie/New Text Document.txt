@@ -1,0 +1,3 @@
+Wyniki dla K=2..9 i N=9
+510 18150 186480 834120 1905120 2328480 1451520 362880
+wszystkie siê miescz¹ w typie Int32
