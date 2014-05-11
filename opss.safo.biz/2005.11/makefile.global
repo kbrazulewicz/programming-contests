@@ -1,0 +1,40 @@
+CFLAGS_OPSS		= -w -std=gnu99 --static
+CXXFLAGS_OPSS	= -w --static
+CFLAGS		= $(CFLAGS_OPSS) -pedantic -Wall -Werror
+CXXFLAGS	= $(CXXFLAGS_OPSS) -pedantic -Wall -Werror
+LDFLAGS		= -lm
+TOCLEAN		+= $(PROG)
+TEST_FILE	?= 00 01 02 03 04 05 06 07 08 09
+
+all:    $(PROG)
+clean:
+	rm -rf $(TOCLEAN)
+
+mail:
+	mail 'judge@acm.timus.ru' -s 'Solution' -c 'krystian@brazulewicz.pl' < $(SRC)
+
+test: all
+	@for i in $(TEST_FILE); do \
+        testIn=test/$$i.in; \
+        testOut=`mktemp`; \
+        testRef=test/$$i.out; \
+        if [ -f $$testIn ]; then \
+            ./$(PROG) < $$testIn > $$testOut; \
+            diff -w $$testOut $$testRef; \
+            if [ $$? -ne 0 ]; then \
+                echo test $$i: FAILURE; \
+            else \
+                echo test $$i: OK; \
+            fi \
+        fi; \
+        if [ -f $${testIn}.bz2 ]; then \
+            bzcat $${testIn}.bz2 | ./$(PROG) > $$testOut; \
+            diff -w $$testOut $$testRef; \
+            if [ $$? -ne 0 ]; then \
+                echo test $$i: FAILURE; \
+            else \
+                echo test $$i: OK; \
+            fi \
+        fi; \
+		rm $$testOut; \
+	done
