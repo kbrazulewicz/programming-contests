@@ -2,8 +2,6 @@
 #include <string>
 using namespace std;
 
-#undef __DEBUG__
-
 static const int MAX_H = 30;
 static const int MAX_N = 50000;
 
@@ -33,8 +31,8 @@ struct Node {
 
 	bool isParent(const Node* aNode) const
 	{
-		return (this->level <= aNode->level) &&
-			(this->value == (aNode->value & mask1HL[this->level - 1]));
+		return this->level <= aNode->level &&
+			this->value == (aNode->value & mask1HL[this->level - 1]);
 	}
 };
 
@@ -47,20 +45,16 @@ int nodePtrCompare(const void* a, const void* b)
 	const struct Node* nodeB = *((struct Node**) b);
 
 	if (nodeA->value == nodeB->value) {
-		if (nodeA->level > nodeB->level) return 1;
-		if (nodeA->level < nodeB->level) return -1;
-		return 0;
+		return nodeA->level - nodeB->level;
 	} else {
-		if (nodeA->value > nodeB->value) return 1;
-		if (nodeA->value < nodeB->value) return -1;
-		return 0;
+		return nodeA->value - nodeB->value;
 	}
 }
 
 
 void enterNumber(Node* aNode)
 {
-	static char line[MAX_H + 3];
+	static char line[MAX_H + 2];
 	char* c = line;
 
 	aNode->level = 0;
@@ -94,7 +88,7 @@ int calculate(int aHeight, int aWordCount)
 	int leafCount = pow2[aHeight + 1] - 1;
 	for (i = 0, j = 0; i < aWordCount; i++) {
 		if (i == 0 || !nodePtr[j]->isParent(nodePtr[i])) {
-#ifdef __DEBUG__
+#if 0
 			printf("%u %x cuts off %d\n", nodePtr[i]->level, nodePtr[i]->value,
 					pow2[aHeight - nodePtr[i]->level + 1] - 1);
 #endif

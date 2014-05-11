@@ -1,7 +1,7 @@
 CFLAGS_OPSS		= -w -std=gnu99 --static
 CXXFLAGS_OPSS	= -w --static
-CFLAGS		= $(CFLAGS_OPSS) -pedantic -Wall -Werror
-CXXFLAGS	= $(CXXFLAGS_OPSS) -pedantic -Wall -Werror
+CFLAGS		= $(CFLAGS_OPSS) -pedantic -Wall -Werror -Wno-long-long
+CXXFLAGS	= $(CXXFLAGS_OPSS) -pedantic -Wall -Werror -Wno-long-long
 LDLIBS		= -lm
 TOCLEAN		+= $(PROG)
 TEST_FILE	?= $(wildcard test/*.in) $(patsubst %.bz2,%,$(wildcard test/*.in.bz2))

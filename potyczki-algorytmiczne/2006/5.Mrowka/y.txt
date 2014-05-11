@@ -1,0 +1,49 @@
+AB
+ BC
+  CD
+   DA
+    AB *
+    AE
+     EF
+      FB *
+      FG *
+     EH *
+   DH
+    HE
+     EA *
+     EF *
+    HG
+     GC *
+     GF *
+  CG
+   GF
+    FB
+     BA
+      AD *
+      AE *
+     BC *
+    FE *
+   GH
+    HD
+     DA *
+     DC
+      CB *
+      CG *
+    HE *
+ BF 
+  FE
+   EA
+    AB *
+    AD
+     DC *
+     DH *
+   EH
+    HD *
+    HG *
+  FG
+   GC
+    CB
+     BA *
+     BF *
+    CD *
+   GH *

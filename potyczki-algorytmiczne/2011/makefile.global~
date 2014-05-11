@@ -1,0 +1,76 @@
+CFLAGS_OPSS		= -w -std=gnu99 --static
+CXXFLAGS_OPSS	= -w --static
+CFLAGS_PA		= -w --static -lm
+CXXFLAGS_PA		= -w --static -lm
+CFLAGS		= $(CFLAGS_PA) -pedantic -Wall -Werror -Wno-long-long
+CXXFLAGS	= $(CXXFLAGS_PA) -pedantic -Wall -Werror -Wno-long-long
+LDLIBS		= -lm
+TOCLEAN		+= $(PROG)
+PROGEXEC    ?= ./$(PROG)
+
+all:    $(PROG)
+
+$(PROG): $(PROG).java
+	javac $^
+
+clean:
+	rm -rf $(TOCLEAN)
+
+mail:
+	mail 'judge@acm.timus.ru' -s 'Solution' -c 'krystian@brazulewicz.pl' < $(SRC)
+
+test: all test-plain test-bz2
+
+test-plain:
+	@find test -name '*.in' -print | sort | while read testIn; do \
+        testRef=`echo $$testIn | sed -e 's/\.in/\.out/'`; \
+        testOut=`mktemp`; \
+		testInTmp=`mktemp`; \
+		testRefTmp=`mktemp`; \
+        if [ -f $$testRef ]; then \
+			cp $$testRef $$testRefTmp; \
+		elif [ -f $${testRef}.bz2 ]; then \
+            bzcat $${testRef}.bz2 > $$testRefTmp; \
+		else \
+			continue; \
+		fi; \
+        if [ -f $$testIn ]; then \
+            $(PROGEXEC) < $$testIn > $$testOut; \
+            diff -w $$testOut $$testRefTmp; \
+            if [ $$? -ne 0 ]; then \
+                echo test $$testIn: FAILURE; \
+            else \
+                echo test $$testIn: OK; \
+            fi \
+        fi; \
+		rm $$testOut; \
+		rm $$testInTmp; \
+		rm $$testRefTmp; \
+	done
+
+test-bz2:
+	@find test -name '*.in.bz2' -print | sort | while read testIn; do \
+        testRef=`echo $$testIn | sed -e 's/\.in.bz2/\.out/'`; \
+        testOut=`mktemp`; \
+		testInTmp=`mktemp`; \
+		testRefTmp=`mktemp`; \
+        if [ -f $$testRef ]; then \
+			cp $$testRef $$testRefTmp; \
+		elif [ -f $${testRef}.bz2 ]; then \
+            bzcat $${testRef}.bz2 > $$testRefTmp; \
+		else \
+			continue; \
+		fi; \
+        if [ -f $$testIn ]; then \
+            bzcat $$testIn | $(PROGEXEC) > $$testOut; \
+            diff -w $$testOut $$testRefTmp; \
+            if [ $$? -ne 0 ]; then \
+                echo test $$testIn: FAILURE; \
+            else \
+                echo test $$testIn: OK; \
+            fi \
+        fi; \
+		rm $$testOut; \
+		rm $$testInTmp; \
+		rm $$testRefTmp; \
+	done

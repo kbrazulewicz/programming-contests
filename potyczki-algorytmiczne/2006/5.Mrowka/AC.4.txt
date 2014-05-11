@@ -1,0 +1,7 @@
+ABFGC
+AEFBC
+AEFGC
+AEHDC
+AEHGC
+ADHGC
+element count [6]
