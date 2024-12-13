@@ -39,7 +39,29 @@ public class PrintQueue {
     }
 
     private List<Integer> fixOrdering(List<Integer> update) {
-        return update;
+        Map<Integer, Set<Integer>> incoming = update.stream()
+                .collect(Collectors.toMap(Function.identity(), HashSet::new));
+
+        orderingRules.stream()
+                .filter(r -> incoming.containsKey(r.x) && incoming.containsKey(r.y))
+                .forEach(r -> incoming.get(r.y).add(r.x));
+
+        List<Integer> fixed = new ArrayList<>();
+
+        while (!incoming.isEmpty()) {
+            int noIncoming = incoming.entrySet().stream()
+                    .filter(entry -> entry.getValue().isEmpty())
+                    .findFirst()
+                    .get()
+                    .getKey();
+
+            fixed.add(noIncoming);
+            incoming.remove(noIncoming);
+            incoming.values()
+                    .forEach(values -> values.remove(noIncoming));
+        }
+
+        return fixed;
     }
 
     public void parse(InputStream in) throws IOException {

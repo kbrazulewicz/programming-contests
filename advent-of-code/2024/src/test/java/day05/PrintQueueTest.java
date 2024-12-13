@@ -20,4 +20,17 @@ public class PrintQueueTest {
         assertThat(printQueue.task1())
                 .isEqualTo(expected);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "00.in, 123",
+            "01.in, 5479"
+    })
+    void task2(String input, long expected) throws IOException {
+        final PrintQueue printQueue = new PrintQueue();
+        printQueue.parse(getClass().getResourceAsStream(input));
+
+        assertThat(printQueue.task2())
+                .isEqualTo(expected);
+    }
 }
