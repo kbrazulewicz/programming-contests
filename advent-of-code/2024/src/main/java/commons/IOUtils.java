@@ -12,11 +12,11 @@ public class IOUtils {
             int xMax = lines.get(0).length();
             int yMax = lines.size();
 
-            var map = new char[yMax][xMax];
+            var map = new char[xMax][yMax];
             for (int y = 0; y < yMax; y++) {
                 var line = lines.get(y);
                 for (int x = 0; x < xMax; x++) {
-                    map[y][x] = line.charAt(x);
+                    map[x][y] = line.charAt(x);
                 }
             }
 
