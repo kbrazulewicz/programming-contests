@@ -8,7 +8,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ResonantCollinearityTest {
-    private ResonantCollinearity resonantCollinearity = new ResonantCollinearity();
+    private final ResonantCollinearity resonantCollinearity = new ResonantCollinearity();
 
     @ParameterizedTest
     @CsvSource({

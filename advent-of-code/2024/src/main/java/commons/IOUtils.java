@@ -23,4 +23,17 @@ public class IOUtils {
             return map;
         }
     }
+
+    public static int[] parseLineOfDigits(InputStream in) throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(in))) {
+            var line = reader.readLine();
+            var array = new int[line.length()];
+
+            for (int i = 0; i < line.length(); i++) {
+                array[i] = line.charAt(i) - '0';
+            }
+
+            return array;
+        }
+    }
 }
