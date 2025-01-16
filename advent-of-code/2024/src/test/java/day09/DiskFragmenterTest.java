@@ -15,12 +15,25 @@ public class DiskFragmenterTest {
     @CsvSource({
             "00.in, 60",
             "01.in, 1928",
-            "02.in, 6310675819476"
+            "02.in, 6310675819476",
     })
     void task1(String input, long expected) throws IOException {
         diskFragmenter.parse(getClass().getResourceAsStream(input));
 
         assertThat(diskFragmenter.task1())
+                .isEqualTo(expected);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "00.in, 60",
+            "01.in, 1928",
+            "02.in, 6310675819476",
+    })
+    void task1a(String input, long expected) throws IOException {
+        diskFragmenter.parse(getClass().getResourceAsStream(input));
+
+        assertThat(diskFragmenter.task1a())
                 .isEqualTo(expected);
     }
 }

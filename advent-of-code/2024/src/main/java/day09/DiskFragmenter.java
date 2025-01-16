@@ -4,8 +4,18 @@ import commons.IOUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NavigableSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public class DiskFragmenter {
+
+    private final static int FREE_SPACE = Integer.MIN_VALUE;
 
     private int[] diskMap;
 
@@ -76,6 +86,44 @@ public class DiskFragmenter {
         return totalBlocks;
     }
 
+    private int[] fillBlocks() {
+        int numberOfBlocks = Arrays.stream(diskMap).sum();
+        var blocks = new int[numberOfBlocks];
+
+        int writeIndex = 0;
+
+        for (int i = 0; i < diskMap.length; i++) {
+            if (i % 2 == 0) {
+                // file
+                for (int j = 0; j < diskMap[i]; j++) {
+                    blocks[writeIndex++] = i / 2;
+                }
+            } else {
+                // space
+                for (int j = 0; j < diskMap[i]; j++) {
+                    blocks[writeIndex++] = FREE_SPACE;
+                }
+            }
+        }
+
+        return blocks;
+    }
+
+    private long checksum(int[] blocks) {
+        return checksum(blocks, blocks.length);
+    }
+
+    private long checksum(int[] blocks, int length) {
+        long checksum = 0;
+        for (int i = 0; i < length; i++) {
+            if (blocks[i] != FREE_SPACE) {
+                checksum += (long) i * blocks[i];
+            }
+        }
+
+        return checksum;
+    }
+
     public void parse(InputStream in) throws IOException {
         diskMap = IOUtils.parseLineOfDigits(in);
     }
@@ -95,5 +143,66 @@ public class DiskFragmenter {
         }
 
         return checksum;
+    }
+
+    public long task1a() {
+        var blocks = fillBlocks();
+
+        int writeIndex = 0;
+
+        for (int i = 0; i < diskMap.length; i++) {
+            if (i % 2 == 0) {
+                // file
+                for (int j = 0; j < diskMap[i]; j++) {
+                    blocks[writeIndex++] = i / 2;
+                }
+            } else {
+                // space
+                for (int j = 0; j < diskMap[i]; j++) {
+                    blocks[writeIndex++] = FREE_SPACE;
+                }
+            }
+        }
+
+        int l = 0;
+        int r = blocks.length - 1;
+        while (l < r) {
+            if (blocks[l] == FREE_SPACE) {
+                while (l < r && blocks[r] == FREE_SPACE) r--;
+                if (l < r) {
+                    blocks[l] = blocks[r];
+                    blocks[r] = FREE_SPACE;
+                    l++;
+                    r--;
+                }
+            } else l++;
+        }
+
+        return checksum(blocks, r + 1);
+    }
+
+    public long task2() {
+        var blocks = fillBlocks();
+
+        int l = 0;
+        for (int i = 0; i < diskMap.length; i++) {
+            if (i % 2 == 1) {
+                // free space
+                int freeSpaceLength = diskMap[i];
+                // find the last file between i and the end of size that is equal or smaller than the size of the free space block
+            } else l += diskMap[i];
+        }
+
+        final List<Integer> diskMapList = Arrays.stream(diskMap).boxed().collect(Collectors.toCollection(ArrayList::new));
+        final Map<Integer, NavigableSet<Integer>> freeSpaceMap = new HashMap<>();
+
+        for (int i = 1; i < diskMapList.size(); i += 2) {
+            int freeSpaceLength = diskMapList.get(i);
+            for (int freeSpace = 1; freeSpace <= freeSpaceLength; freeSpace++) {
+                freeSpaceMap.computeIfAbsent(freeSpace, key -> new TreeSet<>()).add(i);
+            }
+        }
+
+        return checksum(blocks);
     }
 }
