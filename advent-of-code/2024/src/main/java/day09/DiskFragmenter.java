@@ -22,6 +22,29 @@ public class DiskFragmenter {
 
     private int[] diskMap;
 
+    private static class EntryX {
+        enum TYPE {FILE, FREE_SPACE}
+        public final TYPE type;
+        public final int fileId;
+        public int start;
+        public int length;
+
+        private EntryX (TYPE type, int fileId, int start, int length) {
+            this.type = type;
+            this.fileId = fileId;
+            this.start = start;
+            this.length = length;
+        }
+
+        public static EntryX file(int fileId, int start, int length) {
+            return new EntryX(TYPE.FILE, fileId, start, length);
+        }
+
+        public static EntryX freeSpace(int start, int length) {
+            return new EntryX(TYPE.FREE_SPACE, 0, start, length);
+        }
+    }
+
     private class Entry {
         public int entryId;
         public int offset;
@@ -127,6 +150,21 @@ public class DiskFragmenter {
         return checksum;
     }
 
+    private long checksumm(EntryX entry) {
+        if (entry.type == EntryX.TYPE.FREE_SPACE) {
+            return 0;
+        } else {
+            return entry.fileId * (entry.start + (long) (entry.length - 1) * entry.length / 2);
+        }
+    }
+
+    private long checksum(List<EntryX> entries) {
+        return entries.stream()
+            .filter(entry -> entry.type == EntryX.TYPE.FILE)
+            .mapToLong(this::checksumm)
+            .sum();
+    }
+
     public void parse(InputStream in) throws IOException {
         diskMap = IOUtils.parseLineOfDigits(in);
     }
@@ -182,6 +220,27 @@ public class DiskFragmenter {
         }
 
         return checksum(blocks, r + 1);
+    }
+
+    private List<EntryX> initializeDirectory() {
+        final List<EntryX> directory = new ArrayList<>();
+        int start = 0;
+        for (int i = 0; i < diskMap.length; i++) {
+            if (i % 2 == 0) {
+                directory.add(EntryX.file(i / 2, start, diskMap[i]));
+            } else {
+                directory.add(EntryX.freeSpace(start, diskMap[i]));
+            }
+            start += diskMap[i];
+        }
+
+        return directory;
+    }
+
+    public long task1b() {
+        final List<EntryX> directory = initializeDirectory();
+
+        return checksum(directory);
     }
 
     public long task2() {
