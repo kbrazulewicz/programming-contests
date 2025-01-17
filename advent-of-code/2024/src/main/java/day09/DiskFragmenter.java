@@ -240,6 +240,13 @@ public class DiskFragmenter {
     public long task1b() {
         final List<EntryX> directory = initializeDirectory();
 
+        var iterL = directory.listIterator();
+        var iterR = directory.listIterator(directory.size());
+
+        while (iterL.hasNext()) {
+
+        }
+
         return checksum(directory);
     }
 
