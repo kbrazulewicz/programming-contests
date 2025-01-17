@@ -11,11 +11,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class DiskFragmenter {
 
     private final static int FREE_SPACE = Integer.MIN_VALUE;
+    private final static int MAX_LENGTH = 9;
 
     private int[] diskMap;
 
@@ -184,13 +187,43 @@ public class DiskFragmenter {
     public long task2() {
         var blocks = fillBlocks();
 
-        int l = 0;
+        final Map<Integer, NavigableSet<Integer>> fileMap = IntStream.range(0, MAX_LENGTH + 1)
+                .boxed()
+                .collect(Collectors.toMap(Function.identity(), key -> new TreeSet<>()));
+
+        for (int i = 0; i < diskMap.length; i += 2) {
+            int fileLength = diskMap[i];
+            for (int l = fileLength; l <= MAX_LENGTH; l++) {
+                fileMap.get(l).add(i);
+            }
+        }
+
+        int writer = 0;
         for (int i = 0; i < diskMap.length; i++) {
             if (i % 2 == 1) {
                 // free space
                 int freeSpaceLength = diskMap[i];
-                // find the last file between i and the end of size that is equal or smaller than the size of the free space block
-            } else l += diskMap[i];
+
+                var filesThatWillFitIn = fileMap.get(freeSpaceLength).tailSet(i, false);
+                while (!filesThatWillFitIn.isEmpty()) {
+                    var rightmostFileThatWillFitIn = filesThatWillFitIn.last();
+                    var fileLength = diskMap[rightmostFileThatWillFitIn];
+
+                    // copy file
+                    for (int l = 0; l < fileLength; l++) {
+                        blocks[writer++] = rightmostFileThatWillFitIn;
+                    }
+                    // erase the original
+
+                    // remove the file from the fileMap
+                    for (int l = fileLength; l <= MAX_LENGTH; l++) {
+                        fileMap.get(l).remove(rightmostFileThatWillFitIn);
+                    }
+
+                    freeSpaceLength -= fileLength;
+                    filesThatWillFitIn = fileMap.get(freeSpaceLength).tailSet(i, false);
+                }
+            } else writer += diskMap[i];
         }
 
         final List<Integer> diskMapList = Arrays.stream(diskMap).boxed().collect(Collectors.toCollection(ArrayList::new));
